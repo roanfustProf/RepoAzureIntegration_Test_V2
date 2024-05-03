@@ -1,0 +1,854 @@
+{
+	"name": "pipADF_ADM_EjecutarQuerysSQL",
+	"properties": {
+		"activities": [
+			{
+				"name": "04_Execute Query SQL",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "03_Generar lista parametros",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@json(variables('varListParameters')).dsrcDestination",
+							"type": "Expression"
+						}
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "@json(variables('varListParameters')).ExecuteQuery",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "01_Start Process - Save Log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[AdminPackage].[CaptureLogPackage]",
+					"storedProcedureParameters": {
+						"Comments": {
+							"value": {
+								"value": "@concat('Package Start Process','')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"CountryCode": {
+							"value": {
+								"value": "@pipeline().parameters.ParamCountryCode",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Enviroment": {
+							"value": {
+								"value": "@pipeline().parameters.ParamEnvironment",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ExecuteLoadConfiguration": {
+							"value": {
+								"value": "@pipeline().parameters.ParamExecuteLoadId",
+								"type": "Expression"
+							},
+							"type": "Int16"
+						},
+						"LoadDateSSIS": {
+							"value": {
+								"value": "@formatDateTime(utcnow(), 'dd-MMM-yyyy hh:mm:ss tt')",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"LogEventType": {
+							"value": "1",
+							"type": "Int16"
+						},
+						"PackageName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TaskName": {
+							"value": {
+								"value": "@concat('Start Process - Save Log')",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "05_End Process - Save Log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "04_Execute Query SQL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[AdminPackage].[CaptureLogPackage]",
+					"storedProcedureParameters": {
+						"Comments": {
+							"value": {
+								"value": "@concat('Package End Proces','')",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"CountryCode": {
+							"value": {
+								"value": "@pipeline().parameters.ParamCountryCode",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Enviroment": {
+							"value": {
+								"value": "@pipeline().parameters.ParamEnvironment",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ExecuteLoadConfiguration": {
+							"value": {
+								"value": "@pipeline().parameters.ParamExecuteLoadId",
+								"type": "Expression"
+							},
+							"type": "Int16"
+						},
+						"LoadDateSSIS": {
+							"value": {
+								"value": "@formatDateTime(utcnow(), 'dd-MMM-yyyy hh:mm:ss tt')",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"LogEventType": {
+							"value": "1",
+							"type": "Int16"
+						},
+						"PackageName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TaskName": {
+							"value": {
+								"value": "@concat('End Process - Save Log')",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "02_GET Step configuration",
+				"type": "Script",
+				"dependsOn": [
+					{
+						"activity": "01_Start Process - Save Log",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "EXEC [AdminPackage].[ExecuteLoadConfigurationStepADF] @{pipeline().parameters.ParamExecuteLoadCode} , @{pipeline().parameters.ParamEnvironment}",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "03_Generar lista parametros",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "02_GET Step configuration",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('02_GET Step configuration').output.resultSets[0].rows",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "get parameter",
+							"type": "SetVariable",
+							"dependsOn": [],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "varParameter",
+								"value": {
+									"value": "@string(union(json(variables('varListParameters')),json(concat('{\"',item().Parameter,'\":\"',item().ParameterValue,'\"}'))))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Add parameter to json parameters",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "get parameter",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "varListParameters",
+								"value": {
+									"value": "@variables('varParameter')",
+									"type": "Expression"
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "05_End Process - Save Log Error",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "05_End Process - Save Log",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[AdminPackage].[CaptureLogPackage]",
+					"storedProcedureParameters": {
+						"Comments": {
+							"value": {
+								"value": "@{activity('05_End Process - Save Log').error.message}",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"CountryCode": {
+							"value": {
+								"value": "@pipeline().parameters.ParamCountryCode",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Enviroment": {
+							"value": {
+								"value": "@pipeline().parameters.ParamEnvironment",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ExecuteLoadConfiguration": {
+							"value": {
+								"value": "@pipeline().parameters.ParamExecuteLoadId",
+								"type": "Expression"
+							},
+							"type": "Int16"
+						},
+						"LoadDateSSIS": {
+							"value": {
+								"value": "@convertTimeZone(utcNow(),'UTC','SA Pacific Standard Time', 'dd-MMM-yyyy hh:mm:ss tt')",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"LogEventType": {
+							"value": "2",
+							"type": "Int16"
+						},
+						"PackageName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TaskName": {
+							"value": {
+								"value": "@concat('End Process - Save Log')",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "04_End Process - Save Log Error",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "04_Execute Query SQL",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[AdminPackage].[CaptureLogPackage]",
+					"storedProcedureParameters": {
+						"Comments": {
+							"value": {
+								"value": "@{activity('04_Execute Query SQL').error.message}",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"CountryCode": {
+							"value": {
+								"value": "@pipeline().parameters.ParamCountryCode",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Enviroment": {
+							"value": {
+								"value": "@pipeline().parameters.ParamEnvironment",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ExecuteLoadConfiguration": {
+							"value": {
+								"value": "@pipeline().parameters.ParamExecuteLoadId",
+								"type": "Expression"
+							},
+							"type": "Int16"
+						},
+						"LoadDateSSIS": {
+							"value": {
+								"value": "@convertTimeZone(utcNow(),'UTC','SA Pacific Standard Time', 'dd-MMM-yyyy hh:mm:ss tt')",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"LogEventType": {
+							"value": "2",
+							"type": "Int16"
+						},
+						"PackageName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TaskName": {
+							"value": {
+								"value": "@concat('End Process - Save Log')",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "03_End Process - Save Log Error",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "03_Generar lista parametros",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[AdminPackage].[CaptureLogPackage]",
+					"storedProcedureParameters": {
+						"Comments": {
+							"value": {
+								"value": "@{activity('03_Generar lista parametros').error.message}",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"CountryCode": {
+							"value": {
+								"value": "@pipeline().parameters.ParamCountryCode",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Enviroment": {
+							"value": {
+								"value": "@pipeline().parameters.ParamEnvironment",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ExecuteLoadConfiguration": {
+							"value": {
+								"value": "@pipeline().parameters.ParamExecuteLoadId",
+								"type": "Expression"
+							},
+							"type": "Int16"
+						},
+						"LoadDateSSIS": {
+							"value": {
+								"value": "@convertTimeZone(utcNow(),'UTC','SA Pacific Standard Time', 'dd-MMM-yyyy hh:mm:ss tt')",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"LogEventType": {
+							"value": "2",
+							"type": "Int16"
+						},
+						"PackageName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TaskName": {
+							"value": {
+								"value": "@concat('End Process - Save Log')",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "02_End Process - Save Log Error",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "02_GET Step configuration",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[AdminPackage].[CaptureLogPackage]",
+					"storedProcedureParameters": {
+						"Comments": {
+							"value": {
+								"value": "@{activity('02_GET Step configuration').error.message}",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"CountryCode": {
+							"value": {
+								"value": "@pipeline().parameters.ParamCountryCode",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Enviroment": {
+							"value": {
+								"value": "@pipeline().parameters.ParamEnvironment",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ExecuteLoadConfiguration": {
+							"value": {
+								"value": "@pipeline().parameters.ParamExecuteLoadId",
+								"type": "Expression"
+							},
+							"type": "Int16"
+						},
+						"LoadDateSSIS": {
+							"value": {
+								"value": "@convertTimeZone(utcNow(),'UTC','SA Pacific Standard Time', 'dd-MMM-yyyy hh:mm:ss tt')",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"LogEventType": {
+							"value": "2",
+							"type": "Int16"
+						},
+						"PackageName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TaskName": {
+							"value": {
+								"value": "@concat('End Process - Save Log')",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "01_End Process - Save Log Error",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "01_Start Process - Save Log",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[AdminPackage].[CaptureLogPackage]",
+					"storedProcedureParameters": {
+						"Comments": {
+							"value": {
+								"value": "@{activity('01_Start Process - Save Log').error.message}",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"CountryCode": {
+							"value": {
+								"value": "@pipeline().parameters.ParamCountryCode",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"Enviroment": {
+							"value": {
+								"value": "@pipeline().parameters.ParamEnvironment",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"ExecuteLoadConfiguration": {
+							"value": {
+								"value": "@pipeline().parameters.ParamExecuteLoadId",
+								"type": "Expression"
+							},
+							"type": "Int16"
+						},
+						"LoadDateSSIS": {
+							"value": {
+								"value": "@convertTimeZone(utcNow(),'UTC','SA Pacific Standard Time', 'dd-MMM-yyyy hh:mm:ss tt')",
+								"type": "Expression"
+							},
+							"type": "DateTime"
+						},
+						"LogEventType": {
+							"value": "2",
+							"type": "Int16"
+						},
+						"PackageName": {
+							"value": {
+								"value": "@pipeline().Pipeline",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"TaskName": {
+							"value": {
+								"value": "@concat('End Process - Save Log')",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Fail1",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "01_End Process - Save Log Error",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "02_End Process - Save Log Error",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "03_End Process - Save Log Error",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "04_End Process - Save Log Error",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "05_End Process - Save Log Error",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": {
+						"value": "@concat('Se generó un error en el paso ', pipeline().parameters.ParamExecuteLoadCode)",
+						"type": "Expression"
+					},
+					"errorCode": "0001"
+				}
+			}
+		],
+		"parameters": {
+			"ParamExecuteLoadCode": {
+				"type": "string"
+			},
+			"ParamExecuteLoadId": {
+				"type": "string"
+			},
+			"ParamEnvironment": {
+				"type": "string"
+			},
+			"ParamCountryCode": {
+				"type": "string"
+			},
+			"ParamdsrcIntegration": {
+				"type": "string"
+			},
+			"ParamSubscription": {
+				"type": "string"
+			},
+			"ParamResourceGroup": {
+				"type": "string"
+			},
+			"ParamInstanceNameADF": {
+				"type": "string"
+			},
+			"ParamUrlExecutePipeline": {
+				"type": "string"
+			},
+			"ParamUrlStatusRunIdPipeline": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"varListParameters": {
+				"type": "String",
+				"defaultValue": "{}"
+			},
+			"varParameter": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "YanbalPipelines/YanbalODS_BusinessApp"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-04-11T16:46:33Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

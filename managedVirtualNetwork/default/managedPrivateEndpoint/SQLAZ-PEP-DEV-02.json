@@ -1,0 +1,10 @@
+{
+	"name": "SQLAZ-PEP-DEV-02",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/aad81a64-663b-4cf5-9ada-e3d8413031e7/resourceGroups/arsgryandyaeastusdevcorp01/providers/Microsoft.Sql/servers/sqlaz-db-dev-01",
+		"groupId": "sqlServer",
+		"fqdns": [
+			"sqlaz-db-dev-01.database.windows.net"
+		]
+	}
+}

@@ -1,0 +1,34 @@
+{
+	"name": "ls_azure_sql_db",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"parameters": {
+			"ParamDataSourceCode": {
+				"type": "string",
+				"defaultValue": "prd-col-businessapp"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "Kv_connection_string",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamUrlKeyVault": "https://azkvtycodyaeastusprd01.vault.azure.net/"
+					}
+				},
+				"secretName": {
+					"value": "@linkedService().ParamDataSourceCode",
+					"type": "Expression"
+				}
+			}
+		},
+		"connectVia": {
+			"referenceName": "integrationRuntime2",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

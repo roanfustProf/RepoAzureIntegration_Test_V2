@@ -1,0 +1,25 @@
+{
+	"name": "BAPP-DEV-DF-01",
+	"properties": {
+		"globalParameters": {
+			"CountryCodeADF": {
+				"type": "string",
+				"value": "BO"
+			},
+			"EnvironmentADF": {
+				"type": "string",
+				"value": "UAT_BOL"
+			},
+			"Environment": {
+				"type": "string",
+				"value": "UAT"
+			}
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "3bc6de96-484b-473e-92bb-da18d0af6587",
+		"tenantId": "4389fecf-09b9-4e58-a8a1-60be4e33bcce"
+	}
+}

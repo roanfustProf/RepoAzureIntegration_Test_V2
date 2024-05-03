@@ -1,0 +1,40 @@
+{
+	"name": "AzureSqlTable1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_azure_sql_db",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"ParamDataSourceCode": "uat-bol-businessapp"
+			}
+		},
+		"parameters": {
+			"schematablename": {
+				"type": "string",
+				"defaultValue": "0"
+			},
+			"tablename": {
+				"type": "string",
+				"defaultValue": "0"
+			},
+			"ParamDataSourceCode": {
+				"type": "string",
+				"defaultValue": "0"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().schematablename",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().tablename",
+				"type": "Expression"
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
