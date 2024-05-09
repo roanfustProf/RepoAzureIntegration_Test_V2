@@ -894,11 +894,11 @@
 			},
 			"ParamEnvironment": {
 				"type": "string",
-				"defaultValue": "UAT_BOL"
+				"defaultValue": "PRD_COL"
 			},
 			"ParamCountryCode": {
 				"type": "string",
-				"defaultValue": "BO"
+				"defaultValue": "CO"
 			},
 			"ParamExecuteLoadId": {
 				"type": "string",
@@ -906,7 +906,7 @@
 			},
 			"ParamdsrcIntegration": {
 				"type": "string",
-				"defaultValue": "uat-bol-businessapp"
+				"defaultValue": "prd-col-businessapp"
 			}
 		},
 		"variables": {
