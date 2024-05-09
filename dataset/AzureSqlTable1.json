@@ -5,7 +5,7 @@
 			"referenceName": "ls_azure_sql_db",
 			"type": "LinkedServiceReference",
 			"parameters": {
-				"ParamDataSourceCode": "uat-bol-businessapp"
+				"ParamDataSourceCode": "prd-col-businessapp"
 			}
 		},
 		"parameters": {
