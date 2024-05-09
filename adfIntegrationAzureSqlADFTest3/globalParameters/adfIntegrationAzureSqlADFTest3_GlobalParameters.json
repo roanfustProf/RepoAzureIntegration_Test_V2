@@ -1,1 +1,14 @@
-{}
+{
+	"CountryCodeADF": {
+		"type": "string",
+		"value": "CO"
+	},
+	"EnvironmentADF": {
+		"type": "string",
+		"value": "PRD_COL"
+	},
+	"Environment": {
+		"type": "string",
+		"value": "PRD"
+	}
+}
