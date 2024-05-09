@@ -1,0 +1,9 @@
+{
+	"name": "adfIntegrationAzureSqlADFTest3",
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "7f9f6687-3d67-4a2a-824a-932899d6d261",
+		"tenantId": "5b4b0280-f752-4785-a369-bfa9a6148ced"
+	}
+}
