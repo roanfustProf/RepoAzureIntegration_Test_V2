@@ -1,6 +1,12 @@
 {
 	"name": "adfIntegrationAzureSqlADFTest3",
 	"properties": {
+		"globalParameters": {
+			"CountryCodeADF": {
+				"type": "string",
+				"value": "CO"
+			}
+		},
 		"globalConfigurations": {
 			"PipelineBillingEnabled": "true"
 		}
