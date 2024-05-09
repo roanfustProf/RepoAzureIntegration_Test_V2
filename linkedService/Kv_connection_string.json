@@ -1,11 +1,10 @@
 {
 	"name": "Kv_connection_string",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"parameters": {
 			"ParamUrlKeyVault": {
 				"type": "string",
-				"defaultValue": "https://azkvtycodyaeastusprd01.vault.azure.net/"
+				"defaultValue": "https://kvprdcol.vault.azure.net/"
 			}
 		},
 		"annotations": [],
@@ -13,5 +12,6 @@
 		"typeProperties": {
 			"baseUrl": "@{linkedService().ParamUrlKeyVault}"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }
