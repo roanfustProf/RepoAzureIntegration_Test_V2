@@ -1,0 +1,57 @@
+{
+	"name": "pipelinetestpostman",
+	"properties": {
+		"activities": [
+			{
+				"name": "Stored procedure1",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "USP_INSERT_data_test",
+					"storedProcedureParameters": {
+						"ID": {
+							"value": {
+								"value": "@pipeline().parameters.param_ID",
+								"type": "Expression"
+							},
+							"type": "String"
+						},
+						"VALUE": {
+							"value": {
+								"value": "@pipeline().parameters.parama_VALUE",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "asql_asqldbtest",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"param_ID": {
+				"type": "string",
+				"defaultValue": "1"
+			},
+			"parama_VALUE": {
+				"type": "string",
+				"defaultValue": "UNO"
+			}
+		},
+		"folder": {
+			"name": "YanbalPipelines/YanbalODS_BusinessApp"
+		},
+		"annotations": []
+	}
+}

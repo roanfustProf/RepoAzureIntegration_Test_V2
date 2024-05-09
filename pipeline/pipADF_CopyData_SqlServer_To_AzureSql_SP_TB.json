@@ -1,0 +1,191 @@
+{
+	"name": "pipADF_CopyData_SqlServer_To_AzureSql_SP_TB",
+	"properties": {
+		"activities": [
+			{
+				"name": "04_Copy data",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SqlServerSource",
+						"sqlReaderQuery": {
+							"value": "@pipeline().parameters.ParamStoredProcedureSource",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "AzureSqlSink",
+						"preCopyScript": {
+							"value": "@pipeline().parameters.ParamPreCopyScript",
+							"type": "Expression"
+						},
+						"writeBehavior": "insert",
+						"sqlWriterUseTableLock": false
+					},
+					"enableStaging": false,
+					"dataIntegrationUnits": 2,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SqlServerTable1",
+						"type": "DatasetReference",
+						"parameters": {
+							"ParamDataSourceCode": {
+								"value": "@pipeline().parameters.ParamdsrcSource",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "AzureSqlTable1",
+						"type": "DatasetReference",
+						"parameters": {
+							"schematablename": {
+								"value": "@pipeline().parameters.ParamSchemaTableDestination",
+								"type": "Expression"
+							},
+							"tablename": {
+								"value": "@pipeline().parameters.ParamTableDestination",
+								"type": "Expression"
+							},
+							"ParamDataSourceCode": {
+								"value": "@pipeline().parameters.ParamdsrcDestination",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			},
+			{
+				"name": "End Execution - Save Log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "04_Copy data",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[AdminPackage].[CaptureLogPackage2]",
+					"storedProcedureParameters": {
+						"RunIdPipeline": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Fail1",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "04_Copy data",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": {
+						"value": "@concat('Se generó un error en el paso ', pipeline().parameters.ParamExecuteLoadCode)",
+						"type": "Expression"
+					},
+					"errorCode": "0001"
+				}
+			}
+		],
+		"parameters": {
+			"ParamExecuteLoadCode": {
+				"type": "string"
+			},
+			"ParamEnvironment": {
+				"type": "string"
+			},
+			"ParamCountryCode": {
+				"type": "string"
+			},
+			"ParamdsrcSource": {
+				"type": "string"
+			},
+			"ParamStoredProcedureSource": {
+				"type": "string"
+			},
+			"ParamSchemaTableDestination": {
+				"type": "string"
+			},
+			"ParamTableDestination": {
+				"type": "string"
+			},
+			"ParamdsrcDestination": {
+				"type": "string"
+			},
+			"ParamPreCopyScript": {
+				"type": "string"
+			},
+			"ParamdsrcIntegration": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"varListParameters": {
+				"type": "String",
+				"defaultValue": "{}"
+			},
+			"varParameter": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "YanbalPipelines/YanbalODS_BusinessApp"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-04-11T16:46:34Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
