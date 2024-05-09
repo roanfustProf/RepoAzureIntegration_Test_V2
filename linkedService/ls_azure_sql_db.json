@@ -25,10 +25,6 @@
 					"type": "Expression"
 				}
 			}
-		},
-		"connectVia": {
-			"referenceName": "integrationRuntime2",
-			"type": "IntegrationRuntimeReference"
 		}
 	}
 }
