@@ -1,5 +1,5 @@
 {
-	"name": "pipADF_ADM_ExecuteLoadParallel",
+	"name": "pipADF_ADM_ExecuteLoadParallel_V1",
 	"properties": {
 		"activities": [
 			{
@@ -744,7 +744,7 @@
 			}
 		},
 		"folder": {
-			"name": "YanbalPipelines/YanbalODS_BusinessApp"
+			"name": "YanbalPipelines/YanbalODS_BusinessApp_V1"
 		},
 		"annotations": [],
 		"lastPublishTime": "2024-04-11T16:46:34Z"
