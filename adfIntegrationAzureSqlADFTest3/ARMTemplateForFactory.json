@@ -5591,7 +5591,7 @@
 					"referenceName": "ls_azure_sql_db",
 					"type": "LinkedServiceReference",
 					"parameters": {
-						"ParamDataSourceCode": "uat-bol-businessapp"
+						"ParamDataSourceCode": "prd-col-businessapp"
 					}
 				},
 				"parameters": {
@@ -5635,7 +5635,7 @@
 					"referenceName": "ls_sql_server_db",
 					"type": "LinkedServiceReference",
 					"parameters": {
-						"ParamDataSourceCode": "uat-bol-yanbalreportsods"
+						"ParamDataSourceCode": "prd-col-yanbalreportsods"
 					}
 				},
 				"parameters": {
