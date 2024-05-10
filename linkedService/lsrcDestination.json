@@ -1,20 +1,20 @@
 {
-	"name": "ls_sql_server_db",
+	"name": "lsrcDestination",
 	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"parameters": {
 			"ParamDataSourceCode": {
 				"type": "string",
-				"defaultValue": "prdcolyanbalreportsods"
+				"defaultValue": "desaperreportesgenerales"
 			}
 		},
 		"annotations": [],
-		"type": "SqlServer",
+		"type": "AzureSqlDatabase",
 		"typeProperties": {
 			"connectionString": {
 				"type": "AzureKeyVaultSecret",
 				"store": {
-					"referenceName": "Kv_connection_string",
+					"referenceName": "lazurekv_desa_per",
 					"type": "LinkedServiceReference",
 					"parameters": {
 						"ParamUrlKeyVault": "https://kvdesaper3.vault.azure.net/"

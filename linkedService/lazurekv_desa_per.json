@@ -1,5 +1,5 @@
 {
-	"name": "Kv_connection_string",
+	"name": "lazurekv_desa_per",
 	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"parameters": {

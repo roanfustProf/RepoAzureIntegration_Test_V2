@@ -1,10 +1,11 @@
 {
 	"name": "ls_azure_sql_db",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"parameters": {
 			"ParamDataSourceCode": {
 				"type": "string",
-				"defaultValue": "prd-col-businessapp"
+				"defaultValue": "prdcolbusinessapp"
 			}
 		},
 		"annotations": [],
@@ -16,7 +17,7 @@
 					"referenceName": "Kv_connection_string",
 					"type": "LinkedServiceReference",
 					"parameters": {
-						"ParamUrlKeyVault": "https://kvprdcol.vault.azure.net/"
+						"ParamUrlKeyVault": "https://kvdesaper3.vault.azure.net/"
 					}
 				},
 				"secretName": {
@@ -25,6 +26,5 @@
 				}
 			}
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/linkedservices"
+	}
 }

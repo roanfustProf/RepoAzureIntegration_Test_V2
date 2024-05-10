@@ -5,7 +5,7 @@
 			"referenceName": "ls_sql_server_db",
 			"type": "LinkedServiceReference",
 			"parameters": {
-				"ParamDataSourceCode": "prd-col-yanbalreportsods"
+				"ParamDataSourceCode": "uat-bol-yanbalreportsods"
 			}
 		},
 		"parameters": {
