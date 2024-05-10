@@ -34,8 +34,11 @@
 					}
 				},
 				"linkedServiceName": {
-					"referenceName": "asql_asqldbtest",
-					"type": "LinkedServiceReference"
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": "prd-col-businessapp"
+					}
 				}
 			}
 		],
