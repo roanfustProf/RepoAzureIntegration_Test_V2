@@ -1,65 +1,130 @@
 {
-	"name": "pipADF_ADM_EjecutarQuerysSQL",
-	"properties": {
-		"activities": [
-			{
-				"name": "04_Execute Query SQL",
-				"type": "Script",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"linkedServiceName": {
-					"referenceName": "ls_azure_sql_db",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"ParamDataSourceCode": {
-							"value": "@pipeline().parameters.ParamdsrcDestination",
-							"type": "Expression"
-						}
-					}
-				},
-				"typeProperties": {
-					"scripts": [
-						{
-							"type": "Query",
-							"text": {
-								"value": "@pipeline().parameters.ParamExecuteQuery",
-								"type": "Expression"
-							}
-						}
-					],
-					"scriptBlockExecutionTimeout": "02:00:00"
-				}
-			}
-		],
-		"parameters": {
-			"ParamExecuteLoadCode": {
-				"type": "string"
-			},
-			"ParamEnvironment": {
-				"type": "string"
-			},
-			"ParamCountryCode": {
-				"type": "string"
-			},
-			"ParamdsrcDestination": {
-				"type": "string"
-			},
-			"ParamExecuteQuery": {
-				"type": "string"
-			}
-		},
-		"folder": {
-			"name": "YanbalPipelines/YanbalODS_BusinessApp"
-		},
-		"annotations": [],
-		"lastPublishTime": "2024-05-07T02:20:17Z"
-	},
-	"type": "Microsoft.DataFactory/factories/pipelines"
+    "name": "pipADF_ADM_EjecutarQuerysSQL",
+    "properties": {
+        "activities": [
+            {
+                "name": "04_Execute Query SQL",
+                "type": "Script",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "linkedServiceName": {
+                    "referenceName": "ls_azure_sql_db",
+                    "type": "LinkedServiceReference",
+                    "parameters": {
+                        "ParamDataSourceCode": {
+                            "value": "@pipeline().parameters.ParamdsrcDestination",
+                            "type": "Expression"
+                        }
+                    }
+                },
+                "typeProperties": {
+                    "scripts": [
+                        {
+                            "type": "Query",
+                            "text": {
+                                "value": "@pipeline().parameters.ParamExecuteQuery",
+                                "type": "Expression"
+                            }
+                        }
+                    ],
+                    "scriptBlockExecutionTimeout": "02:00:00"
+                }
+            },
+            {
+                "name": "End Execution - Save Log",
+                "type": "SqlServerStoredProcedure",
+                "dependsOn": [
+                    {
+                        "activity": "04_Execute Query SQL",
+                        "dependencyConditions": [
+                            "Completed"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "storedProcedureName": "[AdminPackage].[CaptureLogPackage2]",
+                    "storedProcedureParameters": {
+                        "RunIdPipeline": {
+                            "value": {
+                                "value": "@pipeline().RunId",
+                                "type": "Expression"
+                            },
+                            "type": "String"
+                        }
+                    }
+                },
+                "linkedServiceName": {
+                    "referenceName": "ls_azure_sql_db",
+                    "type": "LinkedServiceReference",
+                    "parameters": {
+                        "ParamDataSourceCode": {
+                            "value": "@pipeline().parameters.ParamdsrcIntegration",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "Fail1",
+                "type": "Fail",
+                "dependsOn": [
+                    {
+                        "activity": "04_Execute Query SQL",
+                        "dependencyConditions": [
+                            "Failed"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "message": {
+                        "value": "@concat('Se generó un error en el paso ', pipeline().parameters.ParamExecuteLoadCode)",
+                        "type": "Expression"
+                    },
+                    "errorCode": "0001"
+                }
+            }
+        ],
+        "parameters": {
+            "ParamExecuteLoadCode": {
+                "type": "string"
+            },
+            "ParamEnvironment": {
+                "type": "string"
+            },
+            "ParamCountryCode": {
+                "type": "string"
+            },
+            "ParamdsrcDestination": {
+                "type": "string"
+            },
+            "ParamExecuteQuery": {
+                "type": "string"
+            },
+            "ParamdsrcIntegration": {
+                "type": "string"
+            }
+        },
+        "folder": {
+            "name": "YanbalPipelines/YanbalODS_BusinessApp"
+        },
+        "annotations": [],
+        "lastPublishTime": "2024-05-10T01:16:09Z"
+    },
+    "type": "Microsoft.DataFactory/factories/pipelines"
 }
