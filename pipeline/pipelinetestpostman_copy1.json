@@ -20,7 +20,10 @@
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "variable1",
-					"value": "1"
+					"value": {
+						"value": "@activity('Script1').output.resultSets[0]['rows'][0].DIVIDIR",
+						"type": "Expression"
+					}
 				}
 			},
 			{
