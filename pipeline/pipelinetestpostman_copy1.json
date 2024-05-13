@@ -7,7 +7,7 @@
 				"type": "SetVariable",
 				"dependsOn": [
 					{
-						"activity": "Stored procedure1",
+						"activity": "Script1",
 						"dependencyConditions": [
 							"Completed"
 						]
@@ -24,8 +24,8 @@
 				}
 			},
 			{
-				"name": "Stored procedure1",
-				"type": "SqlServerStoredProcedure",
+				"name": "Script1",
+				"type": "Script",
 				"dependsOn": [],
 				"policy": {
 					"timeout": "0.12:00:00",
@@ -35,15 +35,18 @@
 					"secureInput": false
 				},
 				"userProperties": [],
-				"typeProperties": {
-					"storedProcedureName": "USP_error_data_test"
-				},
 				"linkedServiceName": {
-					"referenceName": "ls_azure_sql_db",
-					"type": "LinkedServiceReference",
-					"parameters": {
-						"ParamDataSourceCode": "prd-col-businessapp"
-					}
+					"referenceName": "asql_asqldbtest",
+					"type": "LinkedServiceReference"
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "EXEC USP_error_data_test"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
 				}
 			}
 		],
