@@ -1,6 +1,5 @@
 {
 	"name": "ls_azure_sql_db",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"parameters": {
 			"ParamDataSourceCode": {
@@ -26,5 +25,6 @@
 				}
 			}
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }
