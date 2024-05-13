@@ -1,0 +1,72 @@
+{
+	"name": "pipelinetestpostman_copy1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Stored procedure1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "variable1",
+					"value": "1"
+				}
+			},
+			{
+				"name": "Stored procedure1",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "USP_error_data_test"
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": "prd-col-businessapp"
+					}
+				}
+			}
+		],
+		"parameters": {
+			"param_ID": {
+				"type": "string",
+				"defaultValue": "1"
+			},
+			"parama_VALUE": {
+				"type": "string",
+				"defaultValue": "UNO"
+			}
+		},
+		"variables": {
+			"variable1": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "YanbalPipelines/YanbalODS_BusinessApp"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-05-10T01:16:09Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
