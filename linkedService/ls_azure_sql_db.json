@@ -5,7 +5,7 @@
 		"parameters": {
 			"ParamDataSourceCode": {
 				"type": "string",
-				"defaultValue": "prdcolbusinessapp"
+				"defaultValue": "prd-col-businessapp"
 			}
 		},
 		"annotations": [],
@@ -17,7 +17,7 @@
 					"referenceName": "Kv_connection_string",
 					"type": "LinkedServiceReference",
 					"parameters": {
-						"ParamUrlKeyVault": "https://kvdesaper3.vault.azure.net/"
+						"ParamUrlKeyVault": "https://kvprdcol.vault.azure.net/"
 					}
 				},
 				"secretName": {

@@ -1,196 +1,196 @@
 {
-    "name": "pipADF_ADM_ExecuteLoadParallel",
-    "properties": {
-        "activities": [
-            {
-                "name": "02_Load ExecuteLoadSequence",
-                "type": "Script",
-                "dependsOn": [],
-                "policy": {
-                    "timeout": "0.12:00:00",
-                    "retry": 0,
-                    "retryIntervalInSeconds": 30,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "linkedServiceName": {
-                    "referenceName": "ls_azure_sql_db",
-                    "type": "LinkedServiceReference",
-                    "parameters": {
-                        "ParamDataSourceCode": {
-                            "value": "@pipeline().parameters.ParamdsrcIntegration",
-                            "type": "Expression"
-                        }
-                    }
-                },
-                "typeProperties": {
-                    "scripts": [
-                        {
-                            "type": "Query",
-                            "text": {
-                                "value": "EXEC AdminPackage.ExecuteLoadSequenceADF @{pipeline().parameters.ParamExecuteLoadCode} , @{pipeline().parameters.ParamEnvironment}",
-                                "type": "Expression"
-                            }
-                        }
-                    ],
-                    "scriptBlockExecutionTimeout": "02:00:00"
-                }
-            },
-            {
-                "name": "03_Childs Pipelines",
-                "type": "ForEach",
-                "dependsOn": [
-                    {
-                        "activity": "02_Load ExecuteLoadSequence",
-                        "dependencyConditions": [
-                            "Succeeded"
-                        ]
-                    }
-                ],
-                "userProperties": [],
-                "typeProperties": {
-                    "items": {
-                        "value": "@activity('02_Load ExecuteLoadSequence').output.resultSets[0].rows",
-                        "type": "Expression"
-                    },
-                    "isSequential": false,
-                    "batchCount": 30,
-                    "activities": [
-                        {
-                            "name": "Execute Pipeline",
-                            "type": "SqlServerStoredProcedure",
-                            "dependsOn": [],
-                            "policy": {
-                                "timeout": "0.12:00:00",
-                                "retry": 0,
-                                "retryIntervalInSeconds": 30,
-                                "secureOutput": false,
-                                "secureInput": false
-                            },
-                            "userProperties": [],
-                            "typeProperties": {
-                                "storedProcedureName": "[AdminPackage].[ExecutePipeline]",
-                                "storedProcedureParameters": {
-                                    "CountryCode": {
-                                        "value": {
-                                            "value": "@pipeline().parameters.ParamCountryCode",
-                                            "type": "Expression"
-                                        },
-                                        "type": "String"
-                                    },
-                                    "Enviroment": {
-                                        "value": {
-                                            "value": "@pipeline().parameters.ParamEnvironment",
-                                            "type": "Expression"
-                                        },
-                                        "type": "String"
-                                    },
-                                    "ExecuteLoadCode": {
-                                        "value": {
-                                            "value": "@item().SequenceExecuteLoadCode",
-                                            "type": "Expression"
-                                        },
-                                        "type": "String"
-                                    }
-                                }
-                            },
-                            "linkedServiceName": {
-                                "referenceName": "ls_azure_sql_db",
-                                "type": "LinkedServiceReference",
-                                "parameters": {
-                                    "ParamDataSourceCode": {
-                                        "value": "@pipeline().parameters.ParamdsrcIntegration",
-                                        "type": "Expression"
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                "name": "End Execution - Save Log",
-                "type": "SqlServerStoredProcedure",
-                "dependsOn": [
-                    {
-                        "activity": "03_Childs Pipelines",
-                        "dependencyConditions": [
-                            "Completed"
-                        ]
-                    }
-                ],
-                "policy": {
-                    "timeout": "0.12:00:00",
-                    "retry": 0,
-                    "retryIntervalInSeconds": 30,
-                    "secureOutput": false,
-                    "secureInput": false
-                },
-                "userProperties": [],
-                "typeProperties": {
-                    "storedProcedureName": "[AdminPackage].[CaptureLogPackage2]",
-                    "storedProcedureParameters": {
-                        "RunIdPipeline": {
-                            "value": {
-                                "value": "@pipeline().RunId",
-                                "type": "Expression"
-                            },
-                            "type": "String"
-                        }
-                    }
-                },
-                "linkedServiceName": {
-                    "referenceName": "ls_azure_sql_db",
-                    "type": "LinkedServiceReference",
-                    "parameters": {
-                        "ParamDataSourceCode": {
-                            "value": "@pipeline().parameters.ParamdsrcIntegration",
-                            "type": "Expression"
-                        }
-                    }
-                }
-            },
-            {
-                "name": "Fail1",
-                "type": "Fail",
-                "dependsOn": [
-                    {
-                        "activity": "03_Childs Pipelines",
-                        "dependencyConditions": [
-                            "Failed"
-                        ]
-                    }
-                ],
-                "userProperties": [],
-                "typeProperties": {
-                    "message": {
-                        "value": "@concat('Se generó un error en el paso ', pipeline().parameters.ParamExecuteLoadCode)",
-                        "type": "Expression"
-                    },
-                    "errorCode": "0001"
-                }
-            }
-        ],
-        "parameters": {
-            "ParamExecuteLoadCode": {
-                "type": "string"
-            },
-            "ParamEnvironment": {
-                "type": "string"
-            },
-            "ParamCountryCode": {
-                "type": "string"
-            },
-            "ParamdsrcIntegration": {
-                "type": "string"
-            }
-        },
-        "folder": {
-            "name": "YanbalPipelines/YanbalODS_BusinessApp"
-        },
-        "annotations": [],
-        "lastPublishTime": "2024-05-10T01:16:09Z"
-    },
-    "type": "Microsoft.DataFactory/factories/pipelines"
+	"name": "pipADF_ADM_ExecuteLoadParallel",
+	"properties": {
+		"activities": [
+			{
+				"name": "02_Load ExecuteLoadSequence",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": {
+								"value": "EXEC AdminPackage.ExecuteLoadSequenceADF @{pipeline().parameters.ParamExecuteLoadCode} , @{pipeline().parameters.ParamEnvironment}",
+								"type": "Expression"
+							}
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			},
+			{
+				"name": "03_Childs Pipelines",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "02_Load ExecuteLoadSequence",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('02_Load ExecuteLoadSequence').output.resultSets[0].rows",
+						"type": "Expression"
+					},
+					"isSequential": false,
+					"batchCount": 30,
+					"activities": [
+						{
+							"name": "Execute Pipeline",
+							"type": "SqlServerStoredProcedure",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"storedProcedureName": "[AdminPackage].[ExecutePipeline]",
+								"storedProcedureParameters": {
+									"CountryCode": {
+										"value": {
+											"value": "@pipeline().parameters.ParamCountryCode",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"Enviroment": {
+										"value": {
+											"value": "@pipeline().parameters.ParamEnvironment",
+											"type": "Expression"
+										},
+										"type": "String"
+									},
+									"ExecuteLoadCode": {
+										"value": {
+											"value": "@item().SequenceExecuteLoadCode",
+											"type": "Expression"
+										},
+										"type": "String"
+									}
+								}
+							},
+							"linkedServiceName": {
+								"referenceName": "ls_azure_sql_db",
+								"type": "LinkedServiceReference",
+								"parameters": {
+									"ParamDataSourceCode": {
+										"value": "@pipeline().parameters.ParamdsrcIntegration",
+										"type": "Expression"
+									}
+								}
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "End Execution - Save Log",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "03_Childs Pipelines",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[AdminPackage].[CaptureLogPackage2]",
+					"storedProcedureParameters": {
+						"RunIdPipeline": {
+							"value": {
+								"value": "@pipeline().RunId",
+								"type": "Expression"
+							},
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_azure_sql_db",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"ParamDataSourceCode": {
+							"value": "@pipeline().parameters.ParamdsrcIntegration",
+							"type": "Expression"
+						}
+					}
+				}
+			},
+			{
+				"name": "Fail1",
+				"type": "Fail",
+				"dependsOn": [
+					{
+						"activity": "03_Childs Pipelines",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"message": {
+						"value": "@concat('Se generó un error en el paso ', pipeline().parameters.ParamExecuteLoadCode)",
+						"type": "Expression"
+					},
+					"errorCode": "0001"
+				}
+			}
+		],
+		"parameters": {
+			"ParamExecuteLoadCode": {
+				"type": "string"
+			},
+			"ParamEnvironment": {
+				"type": "string"
+			},
+			"ParamCountryCode": {
+				"type": "string"
+			},
+			"ParamdsrcIntegration": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "YanbalPipelines/YanbalODS_BusinessApp"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-05-10T01:16:09Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
 }
