@@ -21,7 +21,7 @@
 				"typeProperties": {
 					"variableName": "variable1",
 					"value": {
-						"value": "@activity('Script1').output.resultSets[0]['rows'][0].DIVIDIR",
+						"value": "@if(activity('Script1').output.resultSets[0]['rows'][0].DIVIDIR.exists,1,2)",
 						"type": "Expression"
 					}
 				}
