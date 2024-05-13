@@ -1,6 +1,5 @@
 {
 	"name": "Kv_connection_string",
-	"type": "Microsoft.DataFactory/factories/linkedservices",
 	"properties": {
 		"parameters": {
 			"ParamUrlKeyVault": {
@@ -13,5 +12,6 @@
 		"typeProperties": {
 			"baseUrl": "@{linkedService().ParamUrlKeyVault}"
 		}
-	}
+	},
+	"type": "Microsoft.DataFactory/factories/linkedservices"
 }
