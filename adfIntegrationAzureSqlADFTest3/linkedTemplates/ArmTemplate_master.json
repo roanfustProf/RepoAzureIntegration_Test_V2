@@ -1,0 +1,132 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adfIntegrationAzureSqlADFTest3"
+		},
+		"Kv_connection_string_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "@{linkedService().ParamUrlKeyVault}"
+		},
+		"ls_azure_sql_db_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "@linkedService().ParamDataSourceCode"
+		},
+		"ls_sql_server_db_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "@linkedService().ParamDataSourceCode"
+		},
+		"SQLAZ-PEP-DEV-02_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/aad81a64-663b-4cf5-9ada-e3d8413031e7/resourceGroups/arsgryandyaeastusdevcorp01/providers/Microsoft.Sql/servers/sqlaz-db-dev-01"
+		},
+		"SQLAZ-PEP-DEV-02_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sqlServer"
+		},
+		"SQLAZ-PEP-DEV-02_properties_fqdns": {
+			"type": "array",
+			"defaultValue": [
+				"sqlaz-db-dev-01.database.windows.net"
+			]
+		},
+		"SQLAZ-PEP-PRD-02_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/aad81a64-663b-4cf5-9ada-e3d8413031e7/resourceGroups/arsgryandyaeastusprdcorp01/providers/Microsoft.Sql/servers/sqlaz-db-prd-01"
+		},
+		"SQLAZ-PEP-PRD-02_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sqlServer"
+		},
+		"SQLAZ-PEP-PRD-02_properties_fqdns": {
+			"type": "array",
+			"defaultValue": [
+				"sqlaz-db-prd-01.database.windows.net"
+			]
+		},
+		"SQLAZ-PEP-UAT-02_properties_privateLinkResourceId": {
+			"type": "string",
+			"defaultValue": "/subscriptions/2e2ccba2-3075-4acc-b7a4-8c7ee9441977/resourceGroups/arsgrybobappeastusnprd01/providers/Microsoft.Sql/servers/sqlaz-db-uat-01"
+		},
+		"SQLAZ-PEP-UAT-02_properties_groupId": {
+			"type": "string",
+			"defaultValue": "sqlServer"
+		},
+		"SQLAZ-PEP-UAT-02_properties_fqdns": {
+			"type": "array",
+			"defaultValue": [
+				"sqlaz-db-uat-01.database.windows.net"
+			]
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adfIntegrationAzureSqlADFTest3_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Kv_connection_string_properties_typeProperties_baseUrl": {
+						"value": "[parameters('Kv_connection_string_properties_typeProperties_baseUrl')]"
+					},
+					"ls_azure_sql_db_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('ls_azure_sql_db_properties_typeProperties_connectionString_secretName')]"
+					},
+					"ls_sql_server_db_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('ls_sql_server_db_properties_typeProperties_connectionString_secretName')]"
+					},
+					"SQLAZ-PEP-DEV-02_properties_privateLinkResourceId": {
+						"value": "[parameters('SQLAZ-PEP-DEV-02_properties_privateLinkResourceId')]"
+					},
+					"SQLAZ-PEP-DEV-02_properties_groupId": {
+						"value": "[parameters('SQLAZ-PEP-DEV-02_properties_groupId')]"
+					},
+					"SQLAZ-PEP-DEV-02_properties_fqdns": {
+						"value": "[parameters('SQLAZ-PEP-DEV-02_properties_fqdns')]"
+					},
+					"SQLAZ-PEP-PRD-02_properties_privateLinkResourceId": {
+						"value": "[parameters('SQLAZ-PEP-PRD-02_properties_privateLinkResourceId')]"
+					},
+					"SQLAZ-PEP-PRD-02_properties_groupId": {
+						"value": "[parameters('SQLAZ-PEP-PRD-02_properties_groupId')]"
+					},
+					"SQLAZ-PEP-PRD-02_properties_fqdns": {
+						"value": "[parameters('SQLAZ-PEP-PRD-02_properties_fqdns')]"
+					},
+					"SQLAZ-PEP-UAT-02_properties_privateLinkResourceId": {
+						"value": "[parameters('SQLAZ-PEP-UAT-02_properties_privateLinkResourceId')]"
+					},
+					"SQLAZ-PEP-UAT-02_properties_groupId": {
+						"value": "[parameters('SQLAZ-PEP-UAT-02_properties_groupId')]"
+					},
+					"SQLAZ-PEP-UAT-02_properties_fqdns": {
+						"value": "[parameters('SQLAZ-PEP-UAT-02_properties_fqdns')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

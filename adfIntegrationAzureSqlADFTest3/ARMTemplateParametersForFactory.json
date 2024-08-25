@@ -1,0 +1,51 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adfIntegrationAzureSqlADFTest3"
+		},
+		"Kv_connection_string_properties_typeProperties_baseUrl": {
+			"value": "@{linkedService().ParamUrlKeyVault}"
+		},
+		"ls_azure_sql_db_properties_typeProperties_connectionString_secretName": {
+			"value": "@linkedService().ParamDataSourceCode"
+		},
+		"ls_sql_server_db_properties_typeProperties_connectionString_secretName": {
+			"value": "@linkedService().ParamDataSourceCode"
+		},
+		"SQLAZ-PEP-DEV-02_properties_privateLinkResourceId": {
+			"value": "/subscriptions/aad81a64-663b-4cf5-9ada-e3d8413031e7/resourceGroups/arsgryandyaeastusdevcorp01/providers/Microsoft.Sql/servers/sqlaz-db-dev-01"
+		},
+		"SQLAZ-PEP-DEV-02_properties_groupId": {
+			"value": "sqlServer"
+		},
+		"SQLAZ-PEP-DEV-02_properties_fqdns": {
+			"value": [
+				"sqlaz-db-dev-01.database.windows.net"
+			]
+		},
+		"SQLAZ-PEP-PRD-02_properties_privateLinkResourceId": {
+			"value": "/subscriptions/aad81a64-663b-4cf5-9ada-e3d8413031e7/resourceGroups/arsgryandyaeastusprdcorp01/providers/Microsoft.Sql/servers/sqlaz-db-prd-01"
+		},
+		"SQLAZ-PEP-PRD-02_properties_groupId": {
+			"value": "sqlServer"
+		},
+		"SQLAZ-PEP-PRD-02_properties_fqdns": {
+			"value": [
+				"sqlaz-db-prd-01.database.windows.net"
+			]
+		},
+		"SQLAZ-PEP-UAT-02_properties_privateLinkResourceId": {
+			"value": "/subscriptions/2e2ccba2-3075-4acc-b7a4-8c7ee9441977/resourceGroups/arsgrybobappeastusnprd01/providers/Microsoft.Sql/servers/sqlaz-db-uat-01"
+		},
+		"SQLAZ-PEP-UAT-02_properties_groupId": {
+			"value": "sqlServer"
+		},
+		"SQLAZ-PEP-UAT-02_properties_fqdns": {
+			"value": [
+				"sqlaz-db-uat-01.database.windows.net"
+			]
+		}
+	}
+}
